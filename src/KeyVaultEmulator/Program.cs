@@ -33,8 +33,7 @@ namespace KeyVaultEmulator
                         .MinimumLevel.Information()
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                         .Enrich.FromLogContext()
-                        .WriteTo.File(new ElasticsearchJsonFormatter(), Path.Combine("logs", "log.txt"), rollingInterval: RollingInterval.Hour, rollOnFileSizeLimit: true)
-                        .CreateLogger();
+                        .WriteTo.File(new ElasticsearchJsonFormatter(), Path.Combine("logs", "log.txt"), rollingInterval: RollingInterval.Hour, rollOnFileSizeLimit: true);
                 });
 	}
 }

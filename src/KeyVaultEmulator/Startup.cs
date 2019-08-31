@@ -8,6 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
+using System.IO;
+using System;
 
 namespace KeyVaultEmulator
 {
@@ -33,7 +37,15 @@ namespace KeyVaultEmulator
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSwaggerDocument();
+            //services.AddSwaggerDocument();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("7", new Info { Title = "Azure Key Vault Emulator", Version = "7" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
             {
@@ -58,11 +70,22 @@ namespace KeyVaultEmulator
 
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
+            //app.UseOpenApi();
+            //app.UseSwaggerUi3();
             loggerFactory.AddSerilog();
 
-			app.UseMvc(routes =>
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+
+            app.UseMvc(routes =>
 			{
 				routes.MapRoute(
 					name: "default",
