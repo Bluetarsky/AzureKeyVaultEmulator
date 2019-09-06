@@ -8,10 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Reflection;
-using System.IO;
-using System;
 
 namespace KeyVaultEmulator
 {
@@ -37,15 +33,18 @@ namespace KeyVaultEmulator
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            //services.AddSwaggerDocument();
-
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerDocument(o => 
             {
-                c.SwaggerDoc("7", new Info { Title = "Azure Key Vault Emulator", Version = "7" });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                o.Version = "7";
             });
+
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("7", new Info { Title = "Azure Key Vault Emulator", Version = "7" });
+            //    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //    //c.IncludeXmlComments(xmlPath);
+            //});
 
             services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
             {
@@ -70,19 +69,36 @@ namespace KeyVaultEmulator
 
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-            //app.UseOpenApi();
-            //app.UseSwaggerUi3();
+            app.UseOpenApi(config =>
+            {
+                config.DocumentName = "v7";
+            });
+            app.UseSwaggerUi3(config =>
+            {
+                config.
+            });
             loggerFactory.AddSerilog();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+            //app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+            //app.UseSwaggerUI(c =>
+            //{
+            //    string basePath = Environment.GetEnvironmentVariable("ASPNETCORE_APPL_PATH");
+            //    if (basePath == null)
+            //    {
+            //        basePath = string.Empty;
+            //    }
+            //    else if (!basePath.EndsWith('/'))
+            //    {
+            //        basePath += "/";
+            //    }
+
+            //    c.SwaggerEndpoint($"{basePath}swagger/v1.0/swagger.json", "API 1");
+            //    c.RoutePrefix = string.Empty;
+            //});
 
 
             app.UseMvc(routes =>
