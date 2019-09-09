@@ -75,32 +75,10 @@ namespace KeyVaultEmulator
             });
             app.UseSwaggerUi3(config =>
             {
-                config.
+                
             });
             loggerFactory.AddSerilog();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            //app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            //app.UseSwaggerUI(c =>
-            //{
-            //    string basePath = Environment.GetEnvironmentVariable("ASPNETCORE_APPL_PATH");
-            //    if (basePath == null)
-            //    {
-            //        basePath = string.Empty;
-            //    }
-            //    else if (!basePath.EndsWith('/'))
-            //    {
-            //        basePath += "/";
-            //    }
-
-            //    c.SwaggerEndpoint($"{basePath}swagger/v1.0/swagger.json", "API 1");
-            //    c.RoutePrefix = string.Empty;
-            //});
-
-
+            
             app.UseMvc(routes =>
 			{
 				routes.MapRoute(

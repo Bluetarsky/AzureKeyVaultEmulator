@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KeyVaultEmulator.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Rest.Azure;
@@ -10,8 +11,11 @@ namespace KeyVaultEmulator.Controllers
     [ApiController]
     public class SecretsController : ControllerBase
     {
-        public SecretsController()
+        private readonly ISecretsService _secretsService;
+
+        public SecretsController(ISecretsService secretsService)
         {
+            _secretsService = secretsService;
         }
 
         /// <summary>
@@ -26,7 +30,8 @@ namespace KeyVaultEmulator.Controllers
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> BackupSecret([FromRoute] string secretName)
         {
-            return Ok();
+            var backedupSecret = await _secretsService.BackupSecretAsync(secretName);
+            return Ok(backedupSecret);
         }
 
         /// <summary>
