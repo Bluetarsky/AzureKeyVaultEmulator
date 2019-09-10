@@ -10,9 +10,16 @@ namespace KeyVaultEmulator.Data
 {
     public class KeyVaultEmulatorContext : DbContext
     {
-        public KeyVaultEmulatorContext([NotNullAttribute] DbContextOptions options) 
+        public KeyVaultEmulatorContext([NotNull] DbContextOptions options) 
             : base(options)
         {
+        }
+
+        public DbSet<Secret> Secrets { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
