@@ -1,0 +1,50 @@
+resources:
+- repo: self
+  clean: true
+
+pool:
+    vmImage: 'Ubuntu 16.04'
+
+variables:
+  buildConfiguration: 'Release'
+  projectName: 'AzureKeyVaultEmulator'
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+
+pr:
+- master
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '$(projectName).sln'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: '$(projectName).sln'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2   
+  displayName: Test
+  inputs:
+    command: test
+    projects: '$(projectName).sln'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --logger trx'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '**/coverage.cobertura.xml'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'

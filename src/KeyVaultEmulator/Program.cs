@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Extensions.Logging;
 using Serilog.Formatting.Elasticsearch;
-using Serilog.Sinks.Syslog;
 
 namespace KeyVaultEmulator
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			CreateWebHostBuilder(args).Build().Run();
-		}
+    public class Program
+    {
+        static readonly LoggerProviderCollection Providers = new LoggerProviderCollection();
 
-		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-			WebHost.CreateDefaultBuilder(args)
-				.UseStartup<Startup>()
+        public static void Main(string[] args)
+        {
+            CreateWebHostBuilder(args).Build().Run();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
                 .ConfigureLogging((hostingcontext, loggingBuilder) =>
                 {
 
@@ -33,7 +28,9 @@ namespace KeyVaultEmulator
                     config
                         .MinimumLevel.Information()
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                        .Enrich.FromLogContext();
+                        .Enrich.FromLogContext()
+                        .WriteTo.Providers(Providers)
+                        .WriteTo.Console(new ElasticsearchJsonFormatter());
                 });
-	}
+    }
 }

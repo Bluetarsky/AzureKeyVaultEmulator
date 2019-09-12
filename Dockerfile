@@ -16,4 +16,5 @@ RUN dotnet publish "KeyVaultEmulator.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+VOLUME /key-vault
 ENTRYPOINT ["dotnet", "KeyVaultEmulator.dll"]
