@@ -17,4 +17,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
 VOLUME /key-vault
+HEALTHCHECK --interval=5s --timeout=10s --retries=3 CMD curl --fail http://localhost:80/health || exit 1
 ENTRYPOINT ["dotnet", "KeyVaultEmulator.dll"]

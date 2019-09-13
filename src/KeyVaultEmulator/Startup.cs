@@ -30,21 +30,12 @@ namespace KeyVaultEmulator
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerDocument(o => 
             {
                 o.Version = "7";
             });
-
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("7", new Info { Title = "Azure Key Vault Emulator", Version = "7" });
-            //    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            //    //c.IncludeXmlComments(xmlPath);
-            //});
 
             services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
             {
@@ -53,6 +44,8 @@ namespace KeyVaultEmulator
 
                 });
             });
+
+            services.AddHealthChecks();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,7 +71,7 @@ namespace KeyVaultEmulator
                 
             });
             loggerFactory.AddSerilog();
-            
+            app.UseHealthChecks("/health");
             app.UseMvc(routes =>
 			{
 				routes.MapRoute(
