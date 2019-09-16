@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KeyVaultEmulator.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DeletedSecretsController : ControllerBase
     {

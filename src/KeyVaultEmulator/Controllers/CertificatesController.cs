@@ -170,5 +170,65 @@ namespace KeyVaultEmulator.Controllers
         {
             return Ok();
         }
+
+        /// <summary>
+        /// The GetCertificatePolicy operation returns the specified certificate policy resources in the specified key vault. This operation 
+        /// requires the certificates/get permission.
+        /// </summary>
+        /// <param name="certificateName"></param>
+        /// <returns></returns>
+        [HttpGet, Route("{certificateName}/policy")]
+        [ProducesResponseType(typeof(AzureOperationResponse<CertificatePolicy>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<IActionResult> GetCertificatePolicy([FromRoute] string certificateName)
+        {
+            return Ok();
+        }
+
+        /// <summary>
+        /// The GetCertificateVersions operation returns the versions of a certificate in the specified key vault. This operation 
+        /// requires the certificates/list permission.
+        /// </summary>
+        /// <param name="certificateName"></param>
+        /// <param name="maxresults"></param>
+        /// <returns></returns>
+        [HttpGet, Route("{certificateName}/versions")]
+        [ProducesResponseType(typeof(AzureOperationResponse<IPage<CertificateItem>>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<IActionResult> GetCertificateVersions([FromRoute] string certificateName, [FromQuery] int maxresults = 25)
+        {
+            return Ok();
+        }
+
+        /// <summary>
+        /// The GetCertificates operation returns the set of certificates resources in the specified key vault. This operation requires
+        /// the certificates/list permission.
+        /// </summary>
+        /// <param name="certificateName"></param>
+        /// <param name="maxresults"></param>
+        /// <param name="includePending"></param>
+        /// <returns></returns>
+        [HttpGet, Route("{certificateName}/versions")]
+        [ProducesResponseType(typeof(AzureOperationResponse<IPage<CertificateItem>>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<IActionResult> GetCertificates([FromRoute] string certificateName, [FromQuery] int maxresults = 25, [FromQuery] bool includePending = false)
+        {
+            return Ok();
+        }
+
+        /// <summary>
+        /// Imports an existing valid certificate, containing a private key, into Azure Key Vault. The certificate to be imported can 
+        /// be in either PFX or PEM format. If the certificate is in PEM format the PEM file must contain the key as well as x509 
+        /// certificates. This operation requires the certificates/import permission.
+        /// </summary>
+        /// <param name="certificateName"></param>
+        /// <returns></returns>
+        [HttpPost, Route("{certificateName}/import")]
+        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<IActionResult> ImportCertificate([FromRoute] string certificateName)
+        {
+            return Ok();
+        }
     }
 }
