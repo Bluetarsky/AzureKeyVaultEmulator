@@ -22,7 +22,7 @@ namespace KeyVaultEmulator.Controllers
         /// </summary>
         /// <param name="certificateName"></param>
         /// <returns></returns>
-        [HttpGet, Route("{certificateName")]
+        [HttpGet("{certificateName}")]
         [ProducesResponseType(typeof(AzureOperationResponse<DeletedCertificateBundle>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedCertificate([FromQuery] string certificateName)
@@ -42,6 +42,36 @@ namespace KeyVaultEmulator.Controllers
         [ProducesResponseType(typeof(AzureOperationResponse<IPage<DeletedCertificateItem>>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedCertificates([FromQuery] int maxresults = 25, [FromQuery] bool includePending = false)
+        {
+            return Ok();
+        }
+
+        /// <summary>
+        /// The PurgeDeletedCertificate operation performs an irreversible deletion of the specified certificate, without possibility for 
+        /// recovery. The operation is not available if the recovery level does not specify 'Purgeable'. This operation requires the 
+        /// certificate/purge permission.
+        /// </summary>
+        /// <param name="certificateName"></param>
+        /// <returns></returns>
+        [HttpDelete("{certificateName}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<IActionResult> PurgeDeletedCertificate([FromRoute] string certificateName)
+        {
+            return NoContent();
+        }
+
+        /// <summary>
+        /// The RecoverDeletedCertificate operation performs the reversal of the Delete operation. The operation is applicable in vaults enabled 
+        /// for soft-delete, and must be issued during the retention interval (available in the deleted certificate's attributes). This operation 
+        /// requires the certificates/recover permission.
+        /// </summary>
+        /// <param name="certificateName"></param>
+        /// <returns></returns>
+        [HttpPost("{certificateName}/recover")]
+        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<IActionResult> RecoverDeletedCertificate([FromRoute] string certificateName)
         {
             return Ok();
         }

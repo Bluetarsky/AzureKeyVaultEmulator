@@ -22,8 +22,8 @@ namespace KeyVaultEmulator.Controllers
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns></returns>
-        [HttpGet, Route("{keyName}")]
-        [ProducesResponseType(typeof(DeletedKeyBundle), StatusCodes.Status200OK)]
+        [HttpGet("{keyName}")]
+        [ProducesResponseType(typeof(AzureOperationResponse<DeletedKeyBundle>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedKey([FromRoute] string keyName)
         {
@@ -54,7 +54,7 @@ namespace KeyVaultEmulator.Controllers
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns></returns>
-        [HttpDelete, Route("{keyName}")]
+        [HttpDelete("{keyName}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> PurgeDeletedKey([FromRoute] string keyName)
@@ -63,12 +63,15 @@ namespace KeyVaultEmulator.Controllers
         }
 
         /// <summary>
-        /// 
+        /// The Recover Deleted Key operation is applicable for deleted keys in soft-delete enabled vaults. It 
+        /// recovers the deleted key back to its latest version under /keys. An attempt to recover an non-deleted 
+        /// key will return an error. Consider this the inverse of the delete operation on soft-delete enabled 
+        /// vaults. This operation requires the keys/recover permission.
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns></returns>
-        [HttpPost, Route("{keyName}/recover")]
-        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
+        [HttpPost("{keyName}/recover")]
+        [ProducesResponseType(typeof(AzureOperationResponse<KeyBundle>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> RecoverDeletedKey([FromRoute] string keyName)
         {
