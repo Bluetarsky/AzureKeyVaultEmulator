@@ -55,9 +55,9 @@ namespace KeyVaultEmulator
 
             services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
             {
-                ctx.UseSqlite("KeyVaultEmulator.sqlite", o =>
+                ctx.UseSqlite("Data Source=/key-vault/KeyVaultEmulator.sqlite", o =>
                 {
-
+                    
                 });
             });
 
@@ -78,6 +78,14 @@ namespace KeyVaultEmulator
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                using (var dbContext = serviceScope.ServiceProvider.GetService<KeyVaultEmulatorContext>())
+                {
+                    dbContext.Database.Migrate();
+                }
+            }
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
