@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NJsonSchema.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KeyVaultEmulator.Data
 {

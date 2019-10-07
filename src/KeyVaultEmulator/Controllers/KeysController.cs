@@ -27,7 +27,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyName">The name of the key</param>
         /// <returns></returns>
         [HttpPost("{keyName}/backup")]
-        [ProducesResponseType(typeof(AzureOperationResponse<BackupKeyResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BackupKeyResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> BackupKey([FromRoute] string keyName)
         {
@@ -42,7 +42,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="createParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/create")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> CreateKey([FromRoute] string keyName, [FromBody] KeyCreateParameters createParameters)
         {
@@ -59,7 +59,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="operationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/decrypt")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyOperationResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> Decrypt([FromRoute] string keyName, [FromBody] KeyOperationsParameters operationsParameters)
         {
@@ -74,7 +74,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyName"></param>
         /// <returns></returns>
         [HttpDelete("{keyName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<DeletedKeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeletedKeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> DeleteKey([FromRoute] string keyName)
         {
@@ -94,7 +94,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="operationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/encrypt")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyOperationResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> Encrypt([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters operationsParameters)
         {
@@ -109,7 +109,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyVersion"></param>
         /// <returns></returns>
         [HttpGet("{keyName}/{keyVersion}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetKey([FromRoute] string keyName, [FromRoute] string keyVersion)
         {
@@ -124,7 +124,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="maxResults"></param>
         /// <returns></returns>
         [HttpGet("{keyName}/versions")]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<KeyItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<KeyItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetKeyVersions([FromRoute] string keyName, [FromQuery] int maxResults = 25)
         {
@@ -139,7 +139,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="maxResults"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<KeyItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<KeyItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetKeys([FromQuery] int maxResults = 25)
         {
@@ -155,7 +155,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyImportParameters"></param>
         /// <returns></returns>
         [HttpPut("{keyName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> ImportKey([FromRoute] string keyName, [FromBody] KeyImportParameters keyImportParameters)
         {
@@ -174,7 +174,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPost("restore")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> RestoreKey([FromBody] string value)
         {
@@ -190,7 +190,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keySignParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/sign")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyOperationResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> Sign([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeySignParameters keySignParameters)
         {
@@ -208,7 +208,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyOperationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/unwrapkey")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyOperationResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> UnwrapKey([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters keyOperationsParameters)
         {
@@ -225,7 +225,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyUpdateParameters"></param>
         /// <returns></returns>
         [HttpPatch("{keyName}/{keyVersion}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> UpdateKey([FromRoute] string keyName, [FromRoute] string keyVersion, KeyUpdateParameters keyUpdateParameters)
         {
@@ -243,7 +243,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyVerifyParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/verify")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyVerifyResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyVerifyResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> Verify([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyVerifyParameters keyVerifyParameters)
         {
@@ -262,7 +262,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyOperationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/wrapkey")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyOperationResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> WrapKey([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters keyOperationsParameters)
         {

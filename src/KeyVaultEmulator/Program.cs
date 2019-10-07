@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Logging;
 using Serilog.Formatting.Elasticsearch;
 
-namespace KeyVaultEmulator
+namespace AzureKeyVaultEmulator
 {
     public class Program
     {
@@ -13,15 +13,14 @@ namespace KeyVaultEmulator
 
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .ConfigureLogging((hostingcontext, loggingBuilder) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-
+                    webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog((builderContext, config) =>
                 {
@@ -29,6 +28,11 @@ namespace KeyVaultEmulator
                         .MinimumLevel.Information()
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                         .Enrich.FromLogContext()
+                        .Enrich.WithProcessId()
+                        .Enrich.WithProcessName()
+                        .Enrich.WithThreadId()
+                        .Enrich.WithThreadName()
+                        .Enrich.WithUserName()
                         .WriteTo.Providers(Providers)
                         .WriteTo.Console(new ElasticsearchJsonFormatter());
                 });

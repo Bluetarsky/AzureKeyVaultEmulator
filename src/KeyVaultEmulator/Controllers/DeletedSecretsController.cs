@@ -22,7 +22,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="secretName"></param>
         /// <returns></returns>
         [HttpGet("{secretName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<DeletedSecretBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeletedSecretBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedSecret([FromRoute] string secretName)
         {
@@ -36,7 +36,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="maxresults"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<DeletedSecretItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<DeletedSecretItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedSecrets([FromQuery] int maxresults = 25)
         {
@@ -64,7 +64,7 @@ namespace KeyVaultEmulator.Controllers
         /// </summary>
         /// <param name="secretName"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(AzureOperationResponse<SecretBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SecretBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         [HttpPost("{secretName}/recover")]
         public async Task<IActionResult> RecoverDeletedSecret([FromRoute] string secretName)

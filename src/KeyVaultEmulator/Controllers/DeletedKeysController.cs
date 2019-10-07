@@ -23,7 +23,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyName"></param>
         /// <returns></returns>
         [HttpGet("{keyName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<DeletedKeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeletedKeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedKey([FromRoute] string keyName)
         {
@@ -40,7 +40,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="maxresults"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<KeyItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<KeyItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedKeys([FromQuery] int maxresults)
         {
@@ -71,7 +71,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="keyName"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/recover")]
-        [ProducesResponseType(typeof(AzureOperationResponse<KeyBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> RecoverDeletedKey([FromRoute] string keyName)
         {

@@ -1,19 +1,22 @@
-﻿using KeyVaultEmulator.Data;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using KeyVaultEmulator.Data;
+using KeyVaultEmulator.Repositories;
+using KeyVaultEmulator.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Serilog;
-using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.IO;
-using System.Reflection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
-namespace KeyVaultEmulator
+namespace AzureKeyVaultEmulator
 {
     public class Startup
     {
@@ -27,21 +30,22 @@ namespace KeyVaultEmulator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+            services.AddRazorPages();
+            services.AddControllers().AddControllersAsServices();
+            services.AddTransient<ISecretsService, SecretsService>();
+            services.AddTransient<ISecretsRepository, SecretsRepository>();
+
+            services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                ctx.UseSqlite("Data Source=KeyVaultEmulator.sqlite", o =>
+                {
+
+                });
             });
 
-            services.AddMvc(o =>
+            services.AddSwaggerGen(options =>
             {
-                //o.Filters.Add()
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Azure Key Vault Emulator",
                     Version = "7.0",
@@ -50,22 +54,12 @@ namespace KeyVaultEmulator
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                options.IncludeXmlComments(xmlPath);
             });
-
-            services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
-            {
-                ctx.UseSqlite("Data Source=/key-vault/KeyVaultEmulator.sqlite", o =>
-                {
-                    
-                });
-            });
-
-            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -73,11 +67,8 @@ namespace KeyVaultEmulator
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
             }
-
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -86,20 +77,21 @@ namespace KeyVaultEmulator
                     dbContext.Database.Migrate();
                 }
             }
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "7");
             });
+            app.UseStaticFiles();
 
-            loggerFactory.AddSerilog();
-            app.UseHealthChecks("/health");
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
     }

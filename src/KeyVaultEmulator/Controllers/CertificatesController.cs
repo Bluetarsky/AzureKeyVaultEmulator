@@ -22,7 +22,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateName"></param>
         /// <returns></returns>
         [HttpPost("{certificateName}/backup")]
-        [ProducesResponseType(typeof(AzureOperationResponse<BackupCertificateResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BackupCertificateResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> BackupCertificate([FromRoute] string certificateName)
         {
@@ -37,7 +37,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateCreateParameters"></param>
         /// <returns></returns>
         [HttpPost("{certificateName}/create")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateOperation>), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(typeof(CertificateOperation), StatusCodes.Status202Accepted)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> CreateCertificate([FromRoute] string certificateName, [FromBody] CertificateCreateParameters certificateCreateParameters)
         {
@@ -51,7 +51,7 @@ namespace KeyVaultEmulator.Controllers
         /// </summary>
         /// <param name="certificateName"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(AzureOperationResponse<DeletedCertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeletedCertificateBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         [HttpDelete("{certificateName}")]
         public async Task<IActionResult> DeleteCertificate([FromRoute] string certificateName)
@@ -65,7 +65,7 @@ namespace KeyVaultEmulator.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("contacts")]
-        [ProducesResponseType(typeof(AzureOperationResponse<Contacts>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Contacts), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> DeleteCertificateContacts()
         {
@@ -79,7 +79,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="issuerName"></param>
         /// <returns></returns>
         [HttpDelete("issuers/{issuerName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<CertificateIssuerItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<CertificateIssuerItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> DeleteCertificateIssuer([FromRoute] string issuerName)
         {
@@ -93,7 +93,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateName"></param>
         /// <returns></returns>
         [HttpDelete("{certificateName}/pending")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateOperation>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateOperation), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> DeleteCertificateOperation([FromRoute] string certificateName)
         {
@@ -107,7 +107,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateVersion"></param>
         /// <returns></returns>
         [HttpGet("{certificateName}/{certificateVersion}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificate([FromRoute] string certificateName, [FromRoute] string certificateVersion)
         {
@@ -120,7 +120,7 @@ namespace KeyVaultEmulator.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("contacts")]
-        [ProducesResponseType(typeof(AzureOperationResponse<Contacts>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Contacts), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificateContacts()
         {
@@ -134,7 +134,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="issuerName"></param>
         /// <returns></returns>
         [HttpGet("issuers/{issuerName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<IssuerBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IssuerBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificateIssuer([FromRoute] string issuerName)
         {
@@ -148,7 +148,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="maxresult"></param>
         /// <returns></returns>
         [HttpGet("issuers")]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<CertificateIssuerItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<CertificateIssuerItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificateIssuers([FromQuery] int maxresult = 25)
         {
@@ -161,7 +161,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateName"></param>
         /// <returns></returns>
         [HttpGet("{certificateName}/pending")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateOperation>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateOperation), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificateOperation([FromRoute] string certificateName)
         {
@@ -175,7 +175,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateName"></param>
         /// <returns></returns>
         [HttpGet("{certificateName}/policy")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificatePolicy>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificatePolicy), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificatePolicy([FromRoute] string certificateName)
         {
@@ -190,7 +190,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="maxresults"></param>
         /// <returns></returns>
         [HttpGet("{certificateName}/versions")]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<CertificateItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<CertificateItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificateVersions([FromRoute] string certificateName, [FromQuery] int maxresults = 25)
         {
@@ -206,7 +206,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="includePending"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<CertificateItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<CertificateItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificates([FromRoute] string certificateName, [FromQuery] int maxresults = 25, [FromQuery] bool includePending = false)
         {
@@ -221,7 +221,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateName"></param>
         /// <returns></returns>
         [HttpPost("{certificateName}/import")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> ImportCertificate([FromRoute] string certificateName)
         {
@@ -236,7 +236,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateMergeParameters"></param>
         /// <returns></returns>
         [HttpPost("{certificateName}/pending/merge")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CertificateBundle), StatusCodes.Status201Created)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> MergeCertificate([FromRoute] string certificateName, [FromBody] CertificateMergeParameters certificateMergeParameters)
         {
@@ -249,7 +249,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateRestoreParameters"></param>
         /// <returns></returns>
         [HttpPost("restore")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> RestoreCertificate([FromBody] CertificateRestoreParameters certificateRestoreParameters)
         {
@@ -262,7 +262,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="contacts"></param>
         /// <returns></returns>
         [HttpPut("contacts")]
-        [ProducesResponseType(typeof(AzureOperationResponse<Contacts>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Contacts), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> SetCertificateContacts([FromBody] Contacts contacts)
         {
@@ -276,7 +276,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateIssuerSetParameters"></param>
         /// <returns></returns>
         [HttpPut("issuers/{issuerName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<IssuerBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IssuerBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> SetCertificateIssuer([FromRoute] string issuerName, [FromBody] CertificateIssuerSetParameters certificateIssuerSetParameters)
         {
@@ -292,7 +292,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateUpdateParameters"></param>
         /// <returns></returns>
         [HttpPatch("{certificateName}/{certificateVersion}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> UpdateCertificate([FromRoute] string certificateName, [FromRoute] string certificateVersion, [FromBody] CertificateUpdateParameters certificateUpdateParameters)
         {
@@ -307,7 +307,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateIssuerUpdateParameters"></param>
         /// <returns></returns>
         [HttpPatch("issuers/{issuerName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<IssuerBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IssuerBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> UpdateCertificateIssuer([FromRoute] string issuerName, [FromBody] CertificateIssuerUpdateParameters certificateIssuerUpdateParameters)
         {
@@ -321,7 +321,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateOperationUpdateParameter"></param>
         /// <returns></returns>
         [HttpPatch("{certificateName}/pending")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateOperation>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateOperation), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> UpdateCertificateOperation([FromRoute] string certificateName, [FromBody] CertificateOperationUpdateParameter certificateOperationUpdateParameter)
         {
@@ -335,7 +335,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificatePolicy"></param>
         /// <returns></returns>
         [HttpPatch("{certificateName}/policy")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificatePolicy>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificatePolicy), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> UpdateCertificatePolicy([FromRoute] string certificateName, [FromBody] CertificatePolicy certificatePolicy)
         {

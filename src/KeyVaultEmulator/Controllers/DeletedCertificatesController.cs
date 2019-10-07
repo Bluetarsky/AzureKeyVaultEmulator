@@ -23,7 +23,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateName"></param>
         /// <returns></returns>
         [HttpGet("{certificateName}")]
-        [ProducesResponseType(typeof(AzureOperationResponse<DeletedCertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeletedCertificateBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedCertificate([FromQuery] string certificateName)
         {
@@ -39,7 +39,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="includePending"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(AzureOperationResponse<IPage<DeletedCertificateItem>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPage<DeletedCertificateItem>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedCertificates([FromQuery] int maxresults = 25, [FromQuery] bool includePending = false)
         {
@@ -69,7 +69,7 @@ namespace KeyVaultEmulator.Controllers
         /// <param name="certificateName"></param>
         /// <returns></returns>
         [HttpPost("{certificateName}/recover")]
-        [ProducesResponseType(typeof(AzureOperationResponse<CertificateBundle>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateBundle), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> RecoverDeletedCertificate([FromRoute] string certificateName)
         {
