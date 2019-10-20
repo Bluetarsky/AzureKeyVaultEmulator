@@ -1,6 +1,8 @@
 using KeyVaultEmulator.Data;
 using Microsoft.Azure.KeyVault.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +15,22 @@ namespace KeyVaultEmulator.Repositories
         public SecretsRepository(KeyVaultEmulatorContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<List<Secret>> GetSecretsAsync(string secretName, int? maxResults)
+        {
+            var secretsQueryable = _dbContext.Secrets
+                .Where(s => string.Equals(s.Name, secretName, StringComparison.InvariantCulture)
+                    && !s.Removed);
+
+            if (maxResults.HasValue)
+            {
+                secretsQueryable.Take(maxResults.Value);
+            }
+
+            var secrets = await secretsQueryable.ToListAsync();
+
+            return secrets;
         }
 
         public async Task<Secret> SetSecretAsync(string secretName, SecretSetParameters secretSetParameters)
@@ -31,7 +49,7 @@ namespace KeyVaultEmulator.Repositories
                 Expires = secretSetParameters.SecretAttributes?.Expires,
                 NotBefore = secretSetParameters?.SecretAttributes?.NotBefore,
                 RecoveryLevel = DeletionRecoveryLevel.Purgeable,
-                Tags = secretSetParameters.Tags?.Select(t => new SecretTag
+                Tags = secretSetParameters.Tags?.Select(t => new Tag
                 {
                     Key = t.Key,
                     Value = t.Value
@@ -41,7 +59,7 @@ namespace KeyVaultEmulator.Repositories
             };
 
             var entity = _dbContext.Add(secret);
-            _ = _dbContext.SaveChangesAsync();
+            _ = await _dbContext.SaveChangesAsync().ConfigureAwait(false);
 
             return secret;
         }

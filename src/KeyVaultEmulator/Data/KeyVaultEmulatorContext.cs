@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace KeyVaultEmulator.Data
@@ -18,37 +19,12 @@ namespace KeyVaultEmulator.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Secret>(entity =>
+            if (modelBuilder is null)
             {
-                entity.HasKey(e => e.Id);
+                throw new ArgumentNullException(nameof(modelBuilder));
+            }
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<SecretTag>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<Key>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<Certificate>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
-            });
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(KeyVaultEmulatorContext).Assembly);
 
             base.OnModelCreating(modelBuilder);
         }

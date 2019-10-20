@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using KeyVaultEmulator;
 using KeyVaultEmulator.Data;
 using KeyVaultEmulator.Repositories;
 using KeyVaultEmulator.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace AzureKeyVaultEmulator
@@ -30,14 +33,42 @@ namespace AzureKeyVaultEmulator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (!Directory.Exists(Constants.VOLUME_PATH))
+            {
+                Directory.CreateDirectory(Constants.VOLUME_PATH);
+            }
+
             services.AddRazorPages();
             services.AddControllers().AddControllersAsServices();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(new byte[1]),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddAuthorization(options =>
+            {
+
+            });
             services.AddTransient<ISecretsService, SecretsService>();
             services.AddTransient<ISecretsRepository, SecretsRepository>();
 
             services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
             {
-                ctx.UseSqlite("Data Source=KeyVaultEmulator.sqlite", o =>
+                ctx.UseSqlite($"Data Source={Path.Combine(Constants.VOLUME_PATH, "KeyVaultEmulator.sqlite")}", o =>
                 {
 
                 });

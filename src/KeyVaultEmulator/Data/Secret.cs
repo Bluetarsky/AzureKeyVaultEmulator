@@ -9,6 +9,8 @@ namespace KeyVaultEmulator.Data
 
         public string Name { get; set; }
 
+        public string VersionId { get; set; }
+
         public string Value { get; set; }
 
         public string ContentType { get; set; }
@@ -23,8 +25,10 @@ namespace KeyVaultEmulator.Data
 
         public string RecoveryLevel { get; set; }
 
+        public bool Removed { get; set; }
+
         public DateTime? Updated { get; set; }
 
-        public virtual ICollection<SecretTag> Tags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }
