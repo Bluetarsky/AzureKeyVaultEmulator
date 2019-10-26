@@ -46,6 +46,7 @@ namespace KeyVaultEmulator.Controllers
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> DeleteSecret([FromRoute] string secretName)
         {
+            var deletedSecret = await _secretsService.DeleteSecretAsync(secretName);
             return Ok();
         }
 
@@ -83,7 +84,8 @@ namespace KeyVaultEmulator.Controllers
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetSecretVersions([FromRoute] string secretName, [FromQuery] int maxresults = 25)
         {
-            return Ok();
+            var secrets = await _secretsService.GetSecretVersionsAsync(secretName, maxresults);
+            return Ok(secrets);
         }
 
         /// <summary>
@@ -98,7 +100,8 @@ namespace KeyVaultEmulator.Controllers
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetSecrets([FromQuery] int maxresults = 25)
         {
-            return Ok();
+            var secrets = await _secretsService.GetSecretsAsync(maxresults);
+            return Ok(secrets);
         }
 
         /// <summary>
@@ -112,7 +115,8 @@ namespace KeyVaultEmulator.Controllers
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> RestoreSecret([FromBody] string value)
         {
-            return Ok();
+            var restoredSecret = await _secretsService.RestoreSecretAsync(value);
+            return Ok(restoredSecret);
         }
 
         /// <summary>
@@ -129,11 +133,6 @@ namespace KeyVaultEmulator.Controllers
         public async Task<IActionResult> SetSecret([FromRoute] string secretName, [FromBody] SecretSetParameters secretSetParameters)
         {
             var secret = await _secretsService.SetSecretAsync(secretName, secretSetParameters);
-            if (secret is null)
-            {
-
-            }
-
             return Ok(secret);
         }
 
@@ -152,6 +151,7 @@ namespace KeyVaultEmulator.Controllers
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> UpdateSecret([FromRoute] string secretName, [FromRoute] string secretVersion, [FromBody] SecretUpdateParameters secretUpdateParameters)
         {
+            var updatedSecret = await _secretsService.UpdateSecretAsync(secretName, secretVersion, secretUpdateParameters);
             return Ok();
         }
     }

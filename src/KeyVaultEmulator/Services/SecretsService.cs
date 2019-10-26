@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AzureKeyVaultEmulator;
 using KeyVaultEmulator.Repositories;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Rest.Azure;
@@ -13,6 +14,11 @@ namespace KeyVaultEmulator.Services
         
         public SecretsService(ISecretsRepository secretsRepository)
         {
+            if (secretsRepository is null)
+            {
+                throw new ArgumentNullException(nameof(secretsRepository));
+            }
+
             _secretsRepository = secretsRepository;
         }
 
@@ -26,7 +32,7 @@ namespace KeyVaultEmulator.Services
             };
         }
 
-        public async Task<IPage<SecretItem>> GetSecretVersions(string secretName, int maxResults)
+        public async Task<IPage<SecretItem>> GetSecretVersionsAsync(string secretName, int maxResults)
         {
             var secrets = await _secretsRepository.GetSecretsAsync(secretName, maxResults);
 
@@ -35,7 +41,7 @@ namespace KeyVaultEmulator.Services
                 
             };
 
-            throw new NotImplementedException();
+            return page;
         }
 
         public async Task<SecretBundle> GetSecretAsync(string secretName, string secretVersion)
@@ -50,6 +56,7 @@ namespace KeyVaultEmulator.Services
 
         public async Task<SecretBundle> SetSecretAsync(string secretName, SecretSetParameters secretSetParameters)
         {
+            var id = Utilities.GenerateId();
             var secret = await _secretsRepository.SetSecretAsync(secretName, secretSetParameters);
             if (secret is null)
             {
@@ -64,6 +71,29 @@ namespace KeyVaultEmulator.Services
                 Tags = secret.Tags?.ToDictionary(t => t.Key, t => t.Value),
                 Value = secret.Value
             };
+        }
+
+        public async Task<DeletedSecretBundle> DeleteSecretAsync(string secretName)
+        {
+            return new DeletedSecretBundle
+            {
+
+            };
+        }
+
+        public async Task<IPage<SecretItem>> GetSecretsAsync(int maxResults)
+        {
+            return new Page<SecretItem>();
+        }
+
+        public async Task<SecretBundle> RestoreSecretAsync(string value)
+        {
+            return new SecretBundle();
+        }
+
+        public async Task<SecretBundle> UpdateSecretAsync(string secretName, string secretVersion, SecretUpdateParameters secretUpdateParameters)
+        {
+            return new SecretBundle();
         }
     }
 }
