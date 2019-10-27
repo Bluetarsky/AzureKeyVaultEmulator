@@ -2,11 +2,11 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace KeyVaultEmulator.Data
+namespace AzureKeyVaultEmulator.Data
 {
     public class KeyVaultEmulatorContext : DbContext
     {
-        public KeyVaultEmulatorContext([NotNull] DbContextOptions options) 
+        public KeyVaultEmulatorContext([NotNull] DbContextOptions options)
             : base(options)
         {
         }

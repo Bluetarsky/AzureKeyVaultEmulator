@@ -1,4 +1,5 @@
-using KeyVaultEmulator.Data;
+using AzureKeyVaultEmulator.Data;
+using AzureKeyVaultEmulator.Repositories.Secrets;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KeyVaultEmulator.Repositories
+namespace AzureKeyVaultEmulator.Repositories
 {
     public class SecretsRepository : ISecretsRepository
     {
@@ -40,6 +41,8 @@ namespace KeyVaultEmulator.Repositories
                 throw new ArgumentNullException(nameof(secretSetParameters));
             }
 
+            var id = Utilities.GenerateId();
+
             var secret = new Secret
             {
                 Name = secretName,
@@ -55,7 +58,8 @@ namespace KeyVaultEmulator.Repositories
                     Value = t.Value
                 }).ToList(),
                 Updated = secretSetParameters.SecretAttributes?.Updated,
-                Value = secretSetParameters.Value
+                Value = secretSetParameters.Value,
+                VersionId = id
             };
 
             var entity = _dbContext.Add(secret);

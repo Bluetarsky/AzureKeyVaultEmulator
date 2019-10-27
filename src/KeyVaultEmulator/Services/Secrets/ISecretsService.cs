@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Rest.Azure;
 
-namespace KeyVaultEmulator.Services
+namespace AzureKeyVaultEmulator.Services.Secrets
 {
     public interface ISecretsService
     {

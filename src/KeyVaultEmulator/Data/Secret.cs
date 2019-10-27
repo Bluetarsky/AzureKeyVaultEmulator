@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KeyVaultEmulator.Data
+namespace AzureKeyVaultEmulator.Data
 {
     public class Secret
     {

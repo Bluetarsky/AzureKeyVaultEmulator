@@ -1,7 +1,7 @@
-namespace KeyVaultEmulator.Services
+namespace AzureKeyVaultEmulator.Services.Certificates
 {
     public interface ICertificatesService
     {
-         
+
     }
 }

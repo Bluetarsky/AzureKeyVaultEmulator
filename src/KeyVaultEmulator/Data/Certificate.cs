@@ -1,4 +1,4 @@
-﻿namespace KeyVaultEmulator.Data
+﻿namespace AzureKeyVaultEmulator.Data
 {
     public class Certificate
     {

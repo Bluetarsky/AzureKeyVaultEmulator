@@ -1,11 +1,11 @@
-﻿using KeyVaultEmulator.Services;
+﻿using AzureKeyVaultEmulator.Services.Secrets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
-namespace KeyVaultEmulator.Controllers
+namespace AzureKeyVaultEmulator.Controllers
 {
     [Route("[controller]")]
     [ApiController]

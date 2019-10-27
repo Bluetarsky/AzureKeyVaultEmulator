@@ -1,9 +1,9 @@
-using KeyVaultEmulator.Data;
+using AzureKeyVaultEmulator.Data;
 using Microsoft.Azure.KeyVault.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace KeyVaultEmulator.Repositories
+namespace AzureKeyVaultEmulator.Repositories.Secrets
 {
     public interface ISecretsRepository
     {

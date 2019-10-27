@@ -4,7 +4,7 @@ using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
-namespace KeyVaultEmulator.Controllers
+namespace AzureKeyVaultEmulator.Controllers
 {
     [Route("[controller]")]
     [ApiController]

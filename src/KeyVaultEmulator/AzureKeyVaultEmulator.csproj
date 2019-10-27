@@ -48,6 +48,9 @@
 		</ItemGroup>
 
 		<ItemGroup>
+		  <Folder Include="Models\Keys\" />
+		  <Folder Include="Models\Certificates\" />
+		  <Folder Include="Models\Secrets\" />
 		  <Folder Include="Pages\SecretManagement\" />
 		</ItemGroup>
 

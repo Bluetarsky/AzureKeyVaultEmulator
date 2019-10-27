@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace KeyVaultEmulator.Data
+namespace AzureKeyVaultEmulator.Data
 {
     [Owned]
     public class Tag
