@@ -1,11 +1,7 @@
-using AzureKeyVaultEmulator.Configuration;
 using AzureKeyVaultEmulator.Data;
-using AzureKeyVaultEmulator.Exceptions;
 using AzureKeyVaultEmulator.Repositories;
 using AzureKeyVaultEmulator.Repositories.Secrets;
 using AzureKeyVaultEmulator.Services.Secrets;
-using Docker.DotNet;
-using Docker.DotNet.Models;
 using KeyVaultEmulator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +14,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace AzureKeyVaultEmulator
@@ -35,22 +30,12 @@ namespace AzureKeyVaultEmulator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            using (var dockerClient = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock")).CreateClient())
-            {
-                var containers = dockerClient.Containers.ListContainersAsync(new ContainersListParameters { All = true }).GetAwaiter().GetResult();
-                var keyVaultEmulatorContainer = containers.FirstOrDefault(c => c.Image.Contains("keyvault", StringComparison.InvariantCultureIgnoreCase));
-                if (keyVaultEmulatorContainer is null)
-                {
-                    throw new ContainerNotFoundException("The Azure Key Vault emulator must be run as a Docker container.");
-                }
+            //string port = Configuration.GetValue<string>("PORT");
+            //if (string.IsNullOrWhiteSpace(port))
+            //{
+            //    throw new ArgumentNullException(nameof(port));
+            //}
 
-                var publicPort = keyVaultEmulatorContainer.Ports.FirstOrDefault()?.PublicPort;
-                services.AddOptions<ContainerSettings>()
-                    .Configure(options =>
-                    {
-                        options.Port = publicPort;
-                    });
-            }
 
             if (!Directory.Exists(Constants.VOLUME_PATH))
             {

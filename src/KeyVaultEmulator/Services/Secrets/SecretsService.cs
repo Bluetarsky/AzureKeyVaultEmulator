@@ -4,18 +4,20 @@ using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Rest.Azure;
 using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AzureKeyVaultEmulator.Services.Secrets
 {
     public class SecretsService : ISecretsService
     {
-        private readonly ContainerSettings _containerSettings;
+        private readonly PortOptions _portOptions;
         private readonly ISecretsRepository _secretsRepository;
 
         public SecretsService(
-            IOptions<ContainerSettings> options,
+            IOptions<PortOptions> options,
             ISecretsRepository secretsRepository)
         {
             if (options is null)
@@ -28,7 +30,7 @@ namespace AzureKeyVaultEmulator.Services.Secrets
                 throw new ArgumentNullException(nameof(secretsRepository));
             }
 
-            _containerSettings = options.Value;
+            _portOptions = options.Value;
             _secretsRepository = secretsRepository;
         }
 
@@ -36,10 +38,20 @@ namespace AzureKeyVaultEmulator.Services.Secrets
         {
             var secrets = await _secretsRepository.GetSecretsAsync(secretName, int.MaxValue);
 
-            return new BackupSecretResult
+            // Convert to SecretBundle
+            var secretBundles = secrets.Select(s => new SecretBundle
             {
+                Attributes = new SecretAttributes(s.Enabled, s.NotBefore, s.Expires, s.Created, s.Updated, s.RecoveryLevel),
+                ContentType = s.ContentType,
+                Id = $"http://localhost:{_portOptions.Port}/secrets/{secretName}/{s.Id.ToString()}",
+                Tags = s.Tags?.ToDictionary(t => t.Key, t => t.Value),
+                Value = s.Value
+            });
 
-            };
+            // Convert to byte array
+            var backedUpSecret = JsonSerializer.SerializeToUtf8Bytes(secretBundles);
+
+            return new BackupSecretResult(backedUpSecret);
         }
 
         public async Task<IPage<SecretItem>> GetSecretVersionsAsync(string secretName, int maxResults)
@@ -72,7 +84,7 @@ namespace AzureKeyVaultEmulator.Services.Secrets
             {
                 Attributes = new SecretAttributes(secret.Enabled, secret.NotBefore, secret.Expires, secret.Created, secret.Updated, secret.RecoveryLevel),
                 ContentType = secret.ContentType,
-                Id = $"http://localhost:{_containerSettings.Port}/secrets/{secretName}/{secret.Id.ToString()}",
+                Id = $"http://localhost:{_portOptions.Port}/secrets/{secretName}/{secret.Id.ToString()}",
                 Tags = secret.Tags?.ToDictionary(t => t.Key, t => t.Value),
                 Value = secret.Value
             };

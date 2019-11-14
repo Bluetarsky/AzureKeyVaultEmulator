@@ -3,14 +3,16 @@ using System;
 using AzureKeyVaultEmulator.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AzureKeyVaultEmulator.Data.Migrations
 {
     [DbContext(typeof(KeyVaultEmulatorContext))]
-    partial class KeyVaultEmulatorContextModelSnapshot : ModelSnapshot
+    [Migration("20191105012325_secret-removed")]
+    partial class secretremoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
