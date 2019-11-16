@@ -65,12 +65,27 @@ namespace AzureKeyVaultEmulator.Repositories
             var entity = _dbContext.Add(secret);
             _ = await _dbContext.SaveChangesAsync().ConfigureAwait(false);
 
-            return secret;
+            return entity.Entity;
         }
 
-        public async Task GetSecret(string secretName, string secretVersion)
+        public async Task<Secret> GetSecretByVersionAsync(string secretName, string secretVersion)
         {
+            return await _dbContext.Secrets
+                .SingleOrDefaultAsync(s => s.Name == secretName && s.VersionId == secretVersion);
+        }
 
+        public async Task SoftDeleteSecretAsync(string secretName)
+        {
+            var secrets = await _dbContext.Secrets
+                .Where(s => s.Name == secretName)
+                .ToListAsync();
+
+            foreach (var secret in secrets)
+            {
+                secret.Removed = true;
+            }
+
+            _ = await _dbContext.SaveChangesAsync();
         }
     }
 }

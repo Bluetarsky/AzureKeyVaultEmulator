@@ -4,7 +4,13 @@ This is a project that attempts to emulate [Azure Key Vault](https://azure.micro
 
 [![Build Status](https://dev.azure.com/tmblue87/OpenSource/_apis/build/status/Bluetarsky.AzureKeyVaultEmulator?branchName=master)](https://dev.azure.com/tmblue87/OpenSource/_build/latest?definitionId=9&branchName=master)
 
-# Why?
+## Why?
 This is mainly a project to enable me to learn new things about the .NET Core and the Key Vault service itself and better ways it could be used at my current place of work.
 
+## Currently supported operations
+### Secrets
+| Action | Supported |
+|--|--|
+| Test | :heavy_check_mark: |
+| | |
 

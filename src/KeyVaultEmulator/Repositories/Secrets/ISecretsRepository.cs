@@ -10,5 +10,7 @@ namespace AzureKeyVaultEmulator.Repositories.Secrets
         Task<List<Secret>> GetSecretsAsync(string secretName, int? maxResults);
 
         Task<Secret> SetSecretAsync(string secretName, SecretSetParameters secretSetParameters);
+
+        Task<Secret> GetSecretByVersionAsync(string secretName, string secretVersion);
     }
 }

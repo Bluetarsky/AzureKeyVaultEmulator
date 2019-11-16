@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Azure.KeyVault.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AzureKeyVaultEmulator.Data
 {
@@ -30,5 +32,17 @@ namespace AzureKeyVaultEmulator.Data
         public DateTime? Updated { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
+
+        public SecretBundle ToSecretBundle(int port)
+        {
+            return new SecretBundle
+            {
+                Attributes = new SecretAttributes(Enabled, NotBefore, Expires, Created, Updated, RecoveryLevel),
+                ContentType = ContentType,
+                Id = $"http://localhost:{port}/secrets/{Name}/{Id.ToString()}",
+                Tags = Tags?.ToDictionary(t => t.Key, t => t.Value),
+                Value = Value
+            };
+        }
     }
 }

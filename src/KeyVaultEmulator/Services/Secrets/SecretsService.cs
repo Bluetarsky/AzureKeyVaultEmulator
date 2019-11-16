@@ -4,6 +4,7 @@ using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Rest.Azure;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -39,14 +40,7 @@ namespace AzureKeyVaultEmulator.Services.Secrets
             var secrets = await _secretsRepository.GetSecretsAsync(secretName, int.MaxValue);
 
             // Convert to SecretBundle
-            var secretBundles = secrets.Select(s => new SecretBundle
-            {
-                Attributes = new SecretAttributes(s.Enabled, s.NotBefore, s.Expires, s.Created, s.Updated, s.RecoveryLevel),
-                ContentType = s.ContentType,
-                Id = $"http://localhost:{_portOptions.Port}/secrets/{secretName}/{s.Id.ToString()}",
-                Tags = s.Tags?.ToDictionary(t => t.Key, t => t.Value),
-                Value = s.Value
-            });
+            var secretBundles = secrets.Select(s => s.ToSecretBundle(_portOptions.Port));
 
             // Convert to byte array
             var backedUpSecret = JsonSerializer.SerializeToUtf8Bytes(secretBundles);
@@ -58,20 +52,16 @@ namespace AzureKeyVaultEmulator.Services.Secrets
         {
             var secrets = await _secretsRepository.GetSecretsAsync(secretName, maxResults);
 
-            var page = new Page<SecretItem>()
-            {
-
-            };
+            var page = (Page<SecretItem>)secrets.AsEnumerable();
 
             return page;
         }
 
         public async Task<SecretBundle> GetSecretAsync(string secretName, string secretVersion)
         {
-            return new SecretBundle
-            {
+            var secret = await _secretsRepository.GetSecretByVersionAsync(secretName, secretVersion);
 
-            };
+            return secret.ToSecretBundle(_portOptions.Port);
         }
 
 
@@ -80,18 +70,13 @@ namespace AzureKeyVaultEmulator.Services.Secrets
         {
             var secret = await _secretsRepository.SetSecretAsync(secretName, secretSetParameters);
 
-            return new SecretBundle()
-            {
-                Attributes = new SecretAttributes(secret.Enabled, secret.NotBefore, secret.Expires, secret.Created, secret.Updated, secret.RecoveryLevel),
-                ContentType = secret.ContentType,
-                Id = $"http://localhost:{_portOptions.Port}/secrets/{secretName}/{secret.Id.ToString()}",
-                Tags = secret.Tags?.ToDictionary(t => t.Key, t => t.Value),
-                Value = secret.Value
-            };
+            return secret.ToSecretBundle(_portOptions.Port);
         }
 
         public async Task<DeletedSecretBundle> DeleteSecretAsync(string secretName)
         {
+
+
             return new DeletedSecretBundle
             {
 
