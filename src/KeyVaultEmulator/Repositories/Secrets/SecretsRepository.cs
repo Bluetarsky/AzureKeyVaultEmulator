@@ -87,5 +87,31 @@ namespace AzureKeyVaultEmulator.Repositories
 
             _ = await _dbContext.SaveChangesAsync();
         }
+
+        public async Task PurgeRemovedSecretsAsync()
+        {
+
+        }
+
+        public async Task<Secret> UpdateSecretAsync(string secretName, string secretVersion, SecretUpdateParameters secretUpdateParameters)
+        {
+            var secret = await GetSecretByVersionAsync(secretName, secretVersion);
+            secret.ContentType = secretUpdateParameters.ContentType;
+            secret.Tags = secretUpdateParameters.Tags
+                .Select(t => new Tag
+                {
+                    Key = t.Key,
+                    Value = t.Value
+                })
+                .ToList();
+            secret.Created = secretUpdateParameters.SecretAttributes.Created;
+            secret.Enabled = secretUpdateParameters.SecretAttributes.Enabled;
+            secret.Expires = secretUpdateParameters.SecretAttributes.Expires;
+            secret.NotBefore = secretUpdateParameters.SecretAttributes.NotBefore;
+            secret.RecoveryLevel = secretUpdateParameters.SecretAttributes.RecoveryLevel;
+            secret.Updated = secretUpdateParameters.SecretAttributes.Updated;
+            _ = await _dbContext.SaveChangesAsync();
+            return secret;
+        }
     }
 }

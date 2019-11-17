@@ -95,7 +95,8 @@ namespace AzureKeyVaultEmulator.Services.Secrets
 
         public async Task<SecretBundle> UpdateSecretAsync(string secretName, string secretVersion, SecretUpdateParameters secretUpdateParameters)
         {
-            return new SecretBundle();
+            var updatedSecret = await _secretsRepository.UpdateSecretAsync(secretName, secretVersion, secretUpdateParameters);
+            return updatedSecret.ToSecretBundle(_portOptions.Port);
         }
     }
 }
