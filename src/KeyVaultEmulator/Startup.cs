@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using NSwag;
 using System;
 using System.IO;
 using System.Reflection;
@@ -78,18 +78,17 @@ namespace AzureKeyVaultEmulator
                 });
             });
 
-            services.AddSwaggerGen(options =>
+            services.AddOpenApiDocument(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
+                options.PostProcess = doc =>
                 {
-                    Title = "Azure Key Vault Emulator",
-                    Version = "7.0",
-                    Description = "The key vault client performs cryptographic key operations and vault operations against the Key Vault service."
-                });
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
+                    doc.Info = new OpenApiInfo
+                    {
+                        Title = "Azure Key Vault Emulator",
+                        Version = "7.0",
+                        Description = "The key vault client performs cryptographic key operations and vault operations against the Key Vault service."
+                    };
+                };
             });
         }
 
@@ -112,11 +111,8 @@ namespace AzureKeyVaultEmulator
                     dbContext.Database.Migrate();
                 }
             }
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "7");
-            });
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -16,6 +16,36 @@ namespace AzureKeyVaultEmulator.Controllers
         }
 
         /// <summary>
+        /// Creates a new key, stores it, then returns key parameters and attributes to the client. The create key operation can be used to create any key type in 
+        /// Azure Key Vault. If the named key already exists, Azure Key Vault creates a new version of the key. It requires the keys/create permission.
+        /// </summary>
+        /// <param name="keyName"></param>
+        /// <param name="createParameters"></param>
+        /// <returns></returns>
+        [HttpPost("{keyName}/create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<ActionResult<KeyBundle>> CreateKey([FromRoute] string keyName, [FromBody] KeyCreateParameters createParameters)
+        {
+            return Ok(default(KeyBundle));
+        }
+
+        /// <summary>
+        /// List keys in the specified vault. Retrieves a list of the keys in the Key Vault as JSON Web Key structures that contain the public part of a stored 
+        /// key.The LIST operation is applicable to all key types, however only the base key identifier, attributes, and tags are provided in the response.
+        /// Individual versions of a key are not listed in the response. This operation requires the keys/list permission.
+        /// </summary>
+        /// <param name="maxResults"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(KeyVaultError))]
+        public async Task<ActionResult<IPage<KeyItem>>> GetKeys([FromQuery] int maxResults = 25)
+        {
+            return Ok();
+        }
+
+        /// <summary>
         /// Requests that a backup of the specified key be downloaded to the client. The Key Backup operation exports a key from Azure Key Vault in a protected form.
         /// Note that this operation does NOT return key material in a form that can be used outside the Azure Key Vault system, the returned key material is either 
         /// protected to a Azure Key Vault HSM or to Azure Key Vault itself.The intent of this operation is to allow a client to GENERATE a key in one Azure Key Vault 
@@ -27,27 +57,14 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyName">The name of the key</param>
         /// <returns></returns>
         [HttpPost("{keyName}/backup")]
-        [ProducesResponseType(typeof(BackupKeyResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> BackupKey([FromRoute] string keyName)
+        public async Task<ActionResult<BackupKeyResult>> BackupKey([FromRoute] string keyName)
         {
             return Ok();
         }
 
-        /// <summary>
-        /// Creates a new key, stores it, then returns key parameters and attributes to the client. The create key operation can be used to create any key type in 
-        /// Azure Key Vault.If the named key already exists, Azure Key Vault creates a new version of the key.It requires the keys/create permission.
-        /// </summary>
-        /// <param name="keyName"></param>
-        /// <param name="createParameters"></param>
-        /// <returns></returns>
-        [HttpPost("{keyName}/create")]
-        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> CreateKey([FromRoute] string keyName, [FromBody] KeyCreateParameters createParameters)
-        {
-            return Ok(default(KeyBundle));
-        }
+        
 
         /// <summary>
         /// Decrypts a single block of encrypted data. The DECRYPT operation decrypts a well-formed block of ciphertext using the target encryption key and 
@@ -59,9 +76,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="operationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/decrypt")]
-        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> Decrypt([FromRoute] string keyName, [FromBody] KeyOperationsParameters operationsParameters)
+        public async Task<ActionResult<KeyOperationResult>> Decrypt([FromRoute] string keyName, [FromBody] KeyOperationsParameters operationsParameters)
         {
             return Ok();
         }
@@ -74,9 +91,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyName"></param>
         /// <returns></returns>
         [HttpDelete("{keyName}")]
-        [ProducesResponseType(typeof(DeletedKeyBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> DeleteKey([FromRoute] string keyName)
+        public async Task<ActionResult<DeletedKeyBundle>> DeleteKey([FromRoute] string keyName)
         {
             return Ok();
         }
@@ -94,9 +111,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="operationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/encrypt")]
-        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> Encrypt([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters operationsParameters)
+        public async Task<ActionResult<KeyOperationResult>> Encrypt([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters operationsParameters)
         {
             return Ok();
         }
@@ -109,9 +126,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyVersion"></param>
         /// <returns></returns>
         [HttpGet("{keyName}/{keyVersion}")]
-        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> GetKey([FromRoute] string keyName, [FromRoute] string keyVersion)
+        public async Task<ActionResult<KeyBundle>> GetKey([FromRoute] string keyName, [FromRoute] string keyVersion)
         {
             return Ok();
         }
@@ -124,24 +141,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="maxResults"></param>
         /// <returns></returns>
         [HttpGet("{keyName}/versions")]
-        [ProducesResponseType(typeof(IPage<KeyItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> GetKeyVersions([FromRoute] string keyName, [FromQuery] int maxResults = 25)
-        {
-            return Ok();
-        }
-
-        /// <summary>
-        /// List keys in the specified vault. Retrieves a list of the keys in the Key Vault as JSON Web Key structures that contain the public part of a stored 
-        /// key.The LIST operation is applicable to all key types, however only the base key identifier, attributes, and tags are provided in the response.
-        /// Individual versions of a key are not listed in the response. This operation requires the keys/list permission.
-        /// </summary>
-        /// <param name="maxResults"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(typeof(IPage<KeyItem>), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> GetKeys([FromQuery] int maxResults = 25)
+        public async Task<ActionResult<IPage<KeyItem>>> GetKeyVersions([FromRoute] string keyName, [FromQuery] int maxResults = 25)
         {
             return Ok();
         }
@@ -155,9 +157,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyImportParameters"></param>
         /// <returns></returns>
         [HttpPut("{keyName}")]
-        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> ImportKey([FromRoute] string keyName, [FromBody] KeyImportParameters keyImportParameters)
+        public async Task<ActionResult<KeyBundle>> ImportKey([FromRoute] string keyName, [FromBody] KeyImportParameters keyImportParameters)
         {
             return Ok();
         }
@@ -174,9 +176,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPost("restore")]
-        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> RestoreKey([FromBody] string value)
+        public async Task<ActionResult<KeyBundle>> RestoreKey([FromBody] string value)
         {
             return Ok();
         }
@@ -190,9 +192,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keySignParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/sign")]
-        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> Sign([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeySignParameters keySignParameters)
+        public async Task<ActionResult<KeyOperationResult>> Sign([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeySignParameters keySignParameters)
         {
             return Ok();
         }
@@ -208,9 +210,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyOperationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/unwrapkey")]
-        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> UnwrapKey([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters keyOperationsParameters)
+        public async Task<ActionResult<KeyOperationResult>> UnwrapKey([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters keyOperationsParameters)
         {
             return Ok();
         }
@@ -225,9 +227,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyUpdateParameters"></param>
         /// <returns></returns>
         [HttpPatch("{keyName}/{keyVersion}")]
-        [ProducesResponseType(typeof(KeyBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> UpdateKey([FromRoute] string keyName, [FromRoute] string keyVersion, KeyUpdateParameters keyUpdateParameters)
+        public async Task<ActionResult<KeyBundle>> UpdateKey([FromRoute] string keyName, [FromRoute] string keyVersion, KeyUpdateParameters keyUpdateParameters)
         {
             return Ok();
         }
@@ -243,9 +245,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyVerifyParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/verify")]
-        [ProducesResponseType(typeof(KeyVerifyResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> Verify([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyVerifyParameters keyVerifyParameters)
+        public async Task<ActionResult<KeyVerifyResult>> Verify([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyVerifyParameters keyVerifyParameters)
         {
             return Ok();
         }
@@ -262,9 +264,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="keyOperationsParameters"></param>
         /// <returns></returns>
         [HttpPost("{keyName}/{keyVersion}/wrapkey")]
-        [ProducesResponseType(typeof(KeyOperationResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> WrapKey([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters keyOperationsParameters)
+        public async Task<ActionResult<KeyOperationResult>> WrapKey([FromRoute] string keyName, [FromRoute] string keyVersion, [FromBody] KeyOperationsParameters keyOperationsParameters)
         {
             return Ok();
         }

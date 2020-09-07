@@ -26,9 +26,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="secretName"></param>
         /// <returns></returns>
         [HttpPost("{secretName}/backup")]
-        [ProducesResponseType(typeof(BackupSecretResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> BackupSecret([FromRoute] string secretName)
+        public async Task<ActionResult<BackupSecretResult>> BackupSecret([FromRoute] string secretName)
         {
             var backedupSecret = await _secretsService.BackupSecretAsync(secretName);
             return Ok(backedupSecret);
@@ -42,9 +42,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="secretName"></param>
         /// <returns></returns>
         [HttpDelete("{secretName}")]
-        [ProducesResponseType(typeof(DeletedSecretBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> DeleteSecret([FromRoute] string secretName)
+        public async Task<ActionResult<DeletedSecretBundle>> DeleteSecret([FromRoute] string secretName)
         {
             var deletedSecret = await _secretsService.DeleteSecretAsync(secretName);
             return Ok();
@@ -58,9 +58,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="secretVersion"></param>
         /// <returns></returns>
         [HttpGet("{secretName}/{secretVersion}")]
-        [ProducesResponseType(typeof(SecretBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> GetSecret([FromRoute] string secretName, [FromRoute] string secretVersion)
+        public async Task<ActionResult<SecretBundle>> GetSecret([FromRoute] string secretName, [FromRoute] string secretVersion)
         {
             var secret = await _secretsService.GetSecretAsync(secretName, secretVersion);
             if (secret is null)
@@ -80,9 +80,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="maxresults"></param>
         /// <returns></returns>
         [HttpGet("{secretName}/versions")]
-        [ProducesResponseType(typeof(IPage<SecretItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> GetSecretVersions([FromRoute] string secretName, [FromQuery] int maxresults = 25)
+        public async Task<ActionResult<IPage<SecretItem>>> GetSecretVersions([FromRoute] string secretName, [FromQuery] int maxresults = 25)
         {
             var secrets = await _secretsService.GetSecretVersionsAsync(secretName, maxresults);
             return Ok(secrets);
@@ -96,9 +96,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="maxresults"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IPage<SecretItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> GetSecrets([FromQuery] int maxresults = 25)
+        public async Task<ActionResult<IPage<SecretItem>>> GetSecrets([FromQuery] int maxresults = 25)
         {
             var secrets = await _secretsService.GetSecretsAsync(maxresults);
             return Ok(secrets);
@@ -111,9 +111,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPost("restore")]
-        [ProducesResponseType(typeof(SecretBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> RestoreSecret([FromBody] string value)
+        public async Task<ActionResult<SecretBundle>> RestoreSecret([FromBody] string value)
         {
             var restoredSecret = await _secretsService.RestoreSecretAsync(value);
             return Ok(restoredSecret);
@@ -128,9 +128,9 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="secretSetParameters"></param>
         /// <returns></returns>
         [HttpPut("{secretName}")]
-        [ProducesResponseType(typeof(SecretBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> SetSecret([FromRoute] string secretName, [FromBody] SecretSetParameters secretSetParameters)
+        public async Task<ActionResult<SecretBundle>> SetSecret([FromRoute] string secretName, [FromBody] SecretSetParameters secretSetParameters)
         {
             var secret = await _secretsService.SetSecretAsync(secretName, secretSetParameters);
             return Ok(secret);
@@ -147,12 +147,12 @@ namespace AzureKeyVaultEmulator.Controllers
         /// <param name="secretUpdateParameters"></param>
         /// <returns></returns>
         [HttpPatch("{secretName}/{secretVersion}")]
-        [ProducesResponseType(typeof(SecretBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<IActionResult> UpdateSecret([FromRoute] string secretName, [FromRoute] string secretVersion, [FromBody] SecretUpdateParameters secretUpdateParameters)
+        public async Task<ActionResult<SecretBundle>> UpdateSecret([FromRoute] string secretName, [FromRoute] string secretVersion, [FromBody] SecretUpdateParameters secretUpdateParameters)
         {
             var updatedSecret = await _secretsService.UpdateSecretAsync(secretName, secretVersion, secretUpdateParameters);
-            return Ok();
+            return Ok(updatedSecret);
         }
     }
 }

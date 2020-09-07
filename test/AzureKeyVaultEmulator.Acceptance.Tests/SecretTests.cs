@@ -1,3 +1,4 @@
+using AzureKeyVaultEmulator;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Azure.KeyVault.Models;
 using System.Net.Http;
