@@ -1,6 +1,4 @@
 using AzureKeyVaultEmulator.Data;
-using AzureKeyVaultEmulator.Repositories;
-using AzureKeyVaultEmulator.Repositories.Secrets;
 using AzureKeyVaultEmulator.Services.Secrets;
 using KeyVaultEmulator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,9 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
-using System;
 using System.IO;
-using System.Reflection;
 
 namespace AzureKeyVaultEmulator
 {
@@ -68,7 +64,6 @@ namespace AzureKeyVaultEmulator
 
             });
             services.AddTransient<ISecretsService, SecretsService>();
-            services.AddTransient<ISecretsRepository, SecretsRepository>();
 
             services.AddDbContextPool<KeyVaultEmulatorContext>(ctx =>
             {

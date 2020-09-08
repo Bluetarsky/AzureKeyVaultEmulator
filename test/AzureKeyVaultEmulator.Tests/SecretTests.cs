@@ -1,6 +1,5 @@
 using AzureKeyVaultEmulator.Configuration;
 using AzureKeyVaultEmulator.Data;
-using AzureKeyVaultEmulator.Repositories.Secrets;
 using AzureKeyVaultEmulator.Services.Secrets;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -14,9 +13,9 @@ namespace AzureKeyVaultEmulator.Tests
     public class SecretTests
 	{
         private readonly ILogger<SecretsService> _logger;
-		private readonly Mock<ISecretsRepository> _mockSecretRepository;
 		private readonly ISecretsService _target;
 		private readonly IOptions<PortOptions> _portOptions;
+		private readonly Mock<KeyVaultEmulatorContext> _mockKeyVaultEmulatorContext;
 
 		public SecretTests()
 		{
@@ -26,8 +25,8 @@ namespace AzureKeyVaultEmulator.Tests
 				Port = 1234
 			};
 			_portOptions = Options.Create(portConfiguration);
-			_mockSecretRepository = new Mock<ISecretsRepository>(MockBehavior.Strict);
-			_target = new SecretsService(_logger, _portOptions, _mockSecretRepository.Object);
+			_mockKeyVaultEmulatorContext = new Mock<KeyVaultEmulatorContext>(MockBehavior.Strict);
+			_target = new SecretsService(_logger, _portOptions, _mockKeyVaultEmulatorContext.Object);
 		}
 
 		public async Task BackupSecretAsync()
@@ -36,9 +35,7 @@ namespace AzureKeyVaultEmulator.Tests
             {
 
             };
-            _mockSecretRepository
-                .Setup(m => m.GetSecretsAsync(It.IsAny<string>(), It.IsAny<int?>()))
-                .ReturnsAsync(secrets);
+            
         }
 	}
 }

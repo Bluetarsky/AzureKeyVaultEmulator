@@ -14,9 +14,6 @@ namespace AzureKeyVaultEmulator.Data.Configuration
             }
 
             builder.HasKey(e => e.Id);
-
-            builder.Property(e => e.Id)
-                .ValueGeneratedOnAdd();
         }
     }
 }
