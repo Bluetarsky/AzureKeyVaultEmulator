@@ -18,7 +18,7 @@ namespace AzureKeyVaultEmulator.Services.Secrets
 
         Task<IPage<SecretItem>> GetSecretsAsync(int maxResults);
 
-        Task<SecretBundle> RestoreSecretAsync(string value);
+        Task<SecretBundle> RestoreSecretAsync(SecretRestoreParameters secretRestoreParameters);
 
         Task<SecretBundle> UpdateSecretAsync(string secretName, string secretVersion, SecretUpdateParameters secretUpdateParameters);
     }

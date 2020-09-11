@@ -17,22 +17,41 @@
 		</PropertyGroup>
 
 		<ItemGroup>
+		  <Compile Remove="Models\Certificates\**" />
+		  <Compile Remove="Models\Keys\**" />
+		  <Compile Remove="Models\Secrets\**" />
+		  <Compile Remove="Pages\SecretManagement\**" />
+		  <Content Remove="Models\Certificates\**" />
+		  <Content Remove="Models\Keys\**" />
+		  <Content Remove="Models\Secrets\**" />
+		  <Content Remove="Pages\SecretManagement\**" />
+		  <EmbeddedResource Remove="Models\Certificates\**" />
+		  <EmbeddedResource Remove="Models\Keys\**" />
+		  <EmbeddedResource Remove="Models\Secrets\**" />
+		  <EmbeddedResource Remove="Pages\SecretManagement\**" />
+		  <None Remove="Models\Certificates\**" />
+		  <None Remove="Models\Keys\**" />
+		  <None Remove="Models\Secrets\**" />
+		  <None Remove="Pages\SecretManagement\**" />
+		</ItemGroup>
+
+		<ItemGroup>
 				<PackageReference Include="Docker.DotNet" Version="3.125.4" />
-				<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.7" />
+				<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
 				<PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-				<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
-				<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="3.1.7" />
-				<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
+				<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+				<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="3.1.8" />
+				<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
 						<PrivateAssets>all</PrivateAssets>
 						<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 				</PackageReference>
-				<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.7" />
-				<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
-				<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
+				<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.8" />
+				<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
+				<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
 				  <PrivateAssets>all</PrivateAssets>
 				  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 				</PackageReference>
-				<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.7" />
+				<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.8" />
 				<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
 				<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
 				<PackageReference Include="NSwag.AspNetCore" Version="13.7.0" />
@@ -47,10 +66,7 @@
 		</ItemGroup>
 
 		<ItemGroup>
-		  <Folder Include="Models\Keys\" />
-		  <Folder Include="Models\Certificates\" />
-		  <Folder Include="Models\Secrets\" />
-		  <Folder Include="Pages\SecretManagement\" />
+		  <Folder Include="Pages\Secrets\" />
 		</ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AzureKeyVaultEmulator.Controllers
+namespace AzureKeyVaultEmulator.V7.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

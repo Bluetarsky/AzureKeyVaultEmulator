@@ -5,7 +5,7 @@ using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
-namespace AzureKeyVaultEmulator.Controllers
+namespace AzureKeyVaultEmulator.V7.Controllers
 {
     [Route("[controller]")]
     [ApiController]
@@ -47,7 +47,7 @@ namespace AzureKeyVaultEmulator.Controllers
         public async Task<ActionResult<DeletedSecretBundle>> DeleteSecret([FromRoute] string secretName)
         {
             var deletedSecret = await _secretsService.DeleteSecretAsync(secretName);
-            return Ok();
+            return Ok(deletedSecret);
         }
 
         /// <summary>
@@ -113,9 +113,9 @@ namespace AzureKeyVaultEmulator.Controllers
         [HttpPost("restore")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<ActionResult<SecretBundle>> RestoreSecret([FromBody] string value)
+        public async Task<ActionResult<SecretBundle>> RestoreSecret([FromBody] SecretRestoreParameters secretRestoreParameters)
         {
-            var restoredSecret = await _secretsService.RestoreSecretAsync(value);
+            var restoredSecret = await _secretsService.RestoreSecretAsync(secretRestoreParameters);
             return Ok(restoredSecret);
         }
 

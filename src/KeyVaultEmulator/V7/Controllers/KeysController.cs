@@ -4,7 +4,7 @@ using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
-namespace AzureKeyVaultEmulator.Controllers
+namespace AzureKeyVaultEmulator.V7.Controllers
 {
     [Route("[controller]")]
     [ApiController]
@@ -64,7 +64,7 @@ namespace AzureKeyVaultEmulator.Controllers
             return Ok();
         }
 
-        
+
 
         /// <summary>
         /// Decrypts a single block of encrypted data. The DECRYPT operation decrypts a well-formed block of ciphertext using the target encryption key and 

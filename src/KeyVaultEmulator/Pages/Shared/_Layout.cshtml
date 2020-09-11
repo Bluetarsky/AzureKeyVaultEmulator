@@ -17,17 +17,26 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/swagger">OpenAPI</a>
-                        </li>
+					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="Secrets" asp-page="/Index">Secrets</a>
+							<a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
 						</li>
-                    </ul>
+						<li class="nav-item">
+							<a class="nav-link text-dark" href="/swagger">OpenAPI</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-page="/Secrets">Secrets</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Secrets" asp-page="/Index">Keys</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Secrets" asp-page="/Index">Certificates</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Secrets" asp-page="/Index">Storage</a>
+						</li>
+					</ul>
                 </div>
             </div>
         </nav>

@@ -132,7 +132,7 @@ namespace AzureKeyVaultEmulator.Services.Secrets
             return new Page<SecretItem>();
         }
 
-        public async Task<SecretBundle> RestoreSecretAsync(string value)
+        public async Task<SecretBundle> RestoreSecretAsync(SecretRestoreParameters secretRestoreParameters)
         {
             return new SecretBundle();
         }
