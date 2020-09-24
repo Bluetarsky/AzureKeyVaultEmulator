@@ -1,8 +1,7 @@
 ﻿using AzureKeyVaultEmulator.Services.Secrets;
+using AzureKeyVaultEmulator.V7.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.KeyVault.Models;
-using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
 namespace AzureKeyVaultEmulator.V7.Controllers
@@ -82,7 +81,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         [HttpGet("{secretName}/versions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<ActionResult<IPage<SecretItem>>> GetSecretVersions([FromRoute] string secretName, [FromQuery] int maxresults = 25)
+        public async Task<ActionResult<SecretListResult>> GetSecretVersions([FromRoute] string secretName, [FromQuery] int maxresults = 25)
         {
             var secrets = await _secretsService.GetSecretVersionsAsync(secretName, maxresults);
             return Ok(secrets);
@@ -98,7 +97,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<ActionResult<IPage<SecretItem>>> GetSecrets([FromQuery] int maxresults = 25)
+        public async Task<ActionResult<SecretListResult>> GetSecrets([FromQuery] int maxresults = 25)
         {
             var secrets = await _secretsService.GetSecretsAsync(maxresults);
             return Ok(secrets);

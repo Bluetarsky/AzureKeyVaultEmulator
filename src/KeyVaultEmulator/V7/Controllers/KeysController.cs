@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AzureKeyVaultEmulator.V7.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.KeyVault.Models;
-using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
 namespace AzureKeyVaultEmulator.V7.Controllers
@@ -40,7 +39,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<ActionResult<IPage<KeyItem>>> GetKeys([FromQuery] int maxResults = 25)
+        public async Task<ActionResult<KeyListResult>> GetKeys([FromQuery] int maxResults = 25)
         {
             return Ok();
         }
@@ -143,7 +142,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         [HttpGet("{keyName}/versions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
-        public async Task<ActionResult<IPage<KeyItem>>> GetKeyVersions([FromRoute] string keyName, [FromQuery] int maxResults = 25)
+        public async Task<ActionResult<KeyListResult>> GetKeyVersions([FromRoute] string keyName, [FromQuery] int maxResults = 25)
         {
             return Ok();
         }

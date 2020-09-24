@@ -1,6 +1,5 @@
+using AzureKeyVaultEmulator.V7.Models;
 using System.Threading.Tasks;
-using Microsoft.Azure.KeyVault.Models;
-using Microsoft.Rest.Azure;
 
 namespace AzureKeyVaultEmulator.Services.Secrets
 {
@@ -8,7 +7,7 @@ namespace AzureKeyVaultEmulator.Services.Secrets
     {
         Task<BackupSecretResult> BackupSecretAsync(string secretName);
 
-        Task<IPage<SecretItem>> GetSecretVersionsAsync(string secretName, int maxResults);
+        Task<SecretListResult> GetSecretVersionsAsync(string secretName, int maxResults);
 
         Task<SecretBundle> GetSecretAsync(string secretName, string secretVersion);
 
@@ -16,7 +15,7 @@ namespace AzureKeyVaultEmulator.Services.Secrets
 
         Task<DeletedSecretBundle> DeleteSecretAsync(string secretName);
 
-        Task<IPage<SecretItem>> GetSecretsAsync(int maxResults);
+        Task<SecretListResult> GetSecretsAsync(int maxResults);
 
         Task<SecretBundle> RestoreSecretAsync(SecretRestoreParameters secretRestoreParameters);
 

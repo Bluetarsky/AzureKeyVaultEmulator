@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AzureKeyVaultEmulator.V7.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Extensions.Logging;
 
 namespace AzureKeyVaultEmulator.Filters

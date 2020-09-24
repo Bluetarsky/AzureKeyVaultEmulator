@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AzureKeyVaultEmulator.V7.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.KeyVault.Models;
-using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
 namespace AzureKeyVaultEmulator.V7.Controllers
@@ -36,7 +35,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         /// <param name="maxresults"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IPage<DeletedSecretItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeletedSecretListResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetDeletedSecrets([FromQuery] int maxresults = 25)
         {

@@ -1,10 +1,9 @@
 using AzureKeyVaultEmulator.Configuration;
 using AzureKeyVaultEmulator.Data;
-using Microsoft.Azure.KeyVault.Models;
+using AzureKeyVaultEmulator.V7.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Rest.Azure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,11 +56,14 @@ namespace AzureKeyVaultEmulator.Services.Secrets
             return new BackupSecretResult(backedUpSecret);
         }
 
-        public async Task<IPage<SecretItem>> GetSecretVersionsAsync(string secretName, int maxResults)
+        public async Task<SecretListResult> GetSecretVersionsAsync(string secretName, int maxResults)
         {
             var secrets = await GetSecretsAsync(secretName, maxResults);
+            var secretItems = secrets.Select(s => new SecretItem
+            {
+            }).ToList();
 
-            var page = (Page<SecretItem>)secrets.AsEnumerable();
+            var page = new SecretListResult(secretItems);
 
             return page;
         }
@@ -110,7 +112,9 @@ namespace AzureKeyVaultEmulator.Services.Secrets
 
         public async Task<DeletedSecretBundle> DeleteSecretAsync(string secretName)
         {
-
+            var secret = await _keyVaultEmulatorContext.Secrets
+                .Where(s => s.Name == secretName)
+                .ToListAsync();
 
             return new DeletedSecretBundle
             {
@@ -118,18 +122,29 @@ namespace AzureKeyVaultEmulator.Services.Secrets
             };
         }
 
-        public async Task<IPage<SecretItem>> GetSecretsAsync(int maxResults)
+        public async Task<SecretListResult> GetSecretsAsync(int maxResults)
         {
             var secrets = await _keyVaultEmulatorContext.Secrets
                 .Take(maxResults)
                 .ToListAsync();
 
+            var secretItems = new List<SecretItem>();
             foreach (var secret in secrets)
             {
-                
+                secretItems.Add(new SecretItem
+                {
+                    Attributes = new SecretAttributes
+                    {
+                        Enabled = secret.Enabled,
+                        Expires = secret.Expires,
+                        NotBefore = secret.NotBefore
+                    }
+                });
             }
 
-            return new Page<SecretItem>();
+            var page = new SecretListResult(secretItems);
+
+            return page;
         }
 
         public async Task<SecretBundle> RestoreSecretAsync(SecretRestoreParameters secretRestoreParameters)

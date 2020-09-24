@@ -1,6 +1,5 @@
-using AzureKeyVaultEmulator;
+using AzureKeyVaultEmulator.V7.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Azure.KeyVault.Models;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;

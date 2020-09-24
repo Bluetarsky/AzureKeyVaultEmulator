@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AzureKeyVaultEmulator.V7.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.KeyVault.Models;
-using Microsoft.Rest.Azure;
 using System.Threading.Tasks;
 
 namespace AzureKeyVaultEmulator.V7.Controllers
@@ -79,7 +78,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         /// <param name="issuerName"></param>
         /// <returns></returns>
         [HttpDelete("issuers/{issuerName}")]
-        [ProducesResponseType(typeof(IPage<CertificateIssuerItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateIssuerListResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> DeleteCertificateIssuer([FromRoute] string issuerName)
         {
@@ -148,7 +147,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         /// <param name="maxresult"></param>
         /// <returns></returns>
         [HttpGet("issuers")]
-        [ProducesResponseType(typeof(IPage<CertificateIssuerItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateIssuerListResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificateIssuers([FromQuery] int maxresult = 25)
         {
@@ -190,7 +189,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         /// <param name="maxresults"></param>
         /// <returns></returns>
         [HttpGet("{certificateName}/versions")]
-        [ProducesResponseType(typeof(IPage<CertificateItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateListResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificateVersions([FromRoute] string certificateName, [FromQuery] int maxresults = 25)
         {
@@ -206,7 +205,7 @@ namespace AzureKeyVaultEmulator.V7.Controllers
         /// <param name="includePending"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IPage<CertificateItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CertificateListResult), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(KeyVaultError))]
         public async Task<IActionResult> GetCertificates([FromRoute] string certificateName, [FromQuery] int maxresults = 25, [FromQuery] bool includePending = false)
         {
